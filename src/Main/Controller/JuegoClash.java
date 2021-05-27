@@ -1,5 +1,6 @@
 package Main.Controller;
 
+        import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
         import javafx.scene.control.Label;
         import javafx.scene.image.ImageView;
@@ -7,7 +8,15 @@ package Main.Controller;
         import javafx.scene.paint.Color;
         import javafx.scene.shape.Rectangle;
 
-public class JuegoClash {
+        import java.io.DataOutputStream;
+        import java.io.IOException;
+        import java.net.Socket;
+        import java.util.Observable;
+        import java.util.Observer;
+
+public class JuegoClash implements Observer {
+    private Socket socket;
+    private DataOutputStream bufferDeSalida = null;
 
     @FXML
     private ImageView EnemigoIzq;
@@ -86,6 +95,24 @@ public class JuegoClash {
     }
 
     @FXML
+    void botonJugar(ActionEvent e) {
+        String ipServer="192.168.0.14";
+        int portServer=3001;
+        try {
+            socket = new Socket(ipServer,portServer);
+            //log.setText( "Conectado");
+            bufferDeSalida = new DataOutputStream(socket.getOutputStream());
+            bufferDeSalida.flush();
+
+            ThreadCliente cliente = new ThreadCliente(socket);
+            cliente.addObserver(this);
+            new Thread(cliente).start();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     void seleccionadoAliado1(MouseEvent event) {
         barraSeleccion1.setFill(Color.rgb(162,74,203));
         barraSeleccion2.setFill(Color.rgb(225,225,225));
@@ -155,13 +182,13 @@ public class JuegoClash {
         barraSeleccion1.setFill(Color.rgb(225,225,225));
         barraSeleccion2.setFill(Color.rgb(225,225,225));
         barraSeleccion3.setFill(Color.rgb(225,225,225));
-        dañoEnemigo(posicionEnemigo,dañoTotal);
+        dañoEnemigoLocal(posicionEnemigo,dañoTotal);
 
-        Ataques ataqueEnviar = new Ataques(posicionEnemigo, dañoTotal);
+        Ataques ataqueEnviar = new Ataques(posicionEnemigo, dañoTotal,0);
     }
 
 
-    public void dañoEnemigo(int enemigo, int daño){
+    public void dañoEnemigoLocal(int enemigo, int daño){
         String vidaAcual;
 
         if(enemigo==1){
@@ -191,5 +218,13 @@ public class JuegoClash {
 
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        Ataques ataque = (Ataques)arg;
+        int gana = ataque.getGanador();
+        int daño=ataque.getDañoTotal();
+        int posicion=ataque.getPosicionObjetivo();
+        System.out.println("Posicion Aliado> "+posicion+" -daño:"+daño);
+    }
 }
 
