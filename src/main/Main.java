@@ -1,4 +1,4 @@
-package Main;
+package main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,11 +8,10 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Modelo/batallacampo.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Cliente player");
         primaryStage.setScene(new Scene(root, 500, 540));
         primaryStage.show();
     }

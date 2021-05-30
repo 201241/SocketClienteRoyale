@@ -1,4 +1,4 @@
-package Main.Controller;
+package main.Controller;
 
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
@@ -8,15 +8,13 @@ package Main.Controller;
         import javafx.scene.paint.Color;
         import javafx.scene.shape.Rectangle;
 
-        import java.io.DataOutputStream;
         import java.io.IOException;
+        import java.io.ObjectOutputStream;
         import java.net.Socket;
         import java.util.Observable;
         import java.util.Observer;
 
 public class JuegoClash implements Observer {
-    private Socket socket;
-    private DataOutputStream bufferDeSalida = null;
 
     @FXML
     private ImageView EnemigoIzq;
@@ -84,6 +82,10 @@ public class JuegoClash implements Observer {
     private int VidaAliado2;
     private int VidaAliado3;
 
+    private Socket socket;
+    private ObjectOutputStream ataqueEnviado = null;
+
+
     public JuegoClash() {
         VidaEnemigo1=100;
         VidaEnemigo2=100;
@@ -94,9 +96,26 @@ public class JuegoClash implements Observer {
         VidaAliado3=100;
     }
 
+    public void initialize(){
+        String ipServer="192.168.0.14";
+        int portServer=3001;
+        try {
+            socket = new Socket(ipServer,portServer);
+            //log.setText( "Conectado");
+            ataqueEnviado = new ObjectOutputStream(socket.getOutputStream());
+            ataqueEnviado.flush();
+
+            ThreadCliente cliente = new ThreadCliente(socket);
+            cliente.addObserver(this);
+            new Thread(cliente).start();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     @FXML
     void botonJugar(ActionEvent e) {
-        String ipServer="192.168.0.14";
+        /*String ipServer="192.168.0.14";
         int portServer=3001;
         try {
             socket = new Socket(ipServer,portServer);
@@ -109,7 +128,7 @@ public class JuegoClash implements Observer {
             new Thread(cliente).start();
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
 
     @FXML
@@ -185,8 +204,23 @@ public class JuegoClash implements Observer {
         dañoEnemigoLocal(posicionEnemigo,dañoTotal);
 
         Ataques ataqueEnviar = new Ataques(posicionEnemigo, dañoTotal,0);
-    }
+        enviarDaño(ataqueEnviar);
 
+    }
+    public void enviarDaño(Ataques ataqueEnviar){
+        System.out.println( "Ataque enviado > "+ataqueEnviar.getDañoTotal());
+        System.out.println("objetivo atacado > "+ataqueEnviar.getPosicionObjetivo());
+
+        try {
+            ataqueEnviado.writeObject(ataqueEnviar);
+            System.out.println("Si enviado");
+
+        } catch (IOException ioException) {
+            System.out.println(ioException.getMessage());
+            System.out.println("Error es: "+ioException);
+            System.out.println("No enviado");
+        }
+    }
 
     public void dañoEnemigoLocal(int enemigo, int daño){
         String vidaAcual;
@@ -220,11 +254,15 @@ public class JuegoClash implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Ataques ataque = (Ataques)arg;
-        int gana = ataque.getGanador();
-        int daño=ataque.getDañoTotal();
-        int posicion=ataque.getPosicionObjetivo();
-        System.out.println("Posicion Aliado> "+posicion+" -daño:"+daño);
+        //if(o instanceof )
+
+            Ataques ataqueResivido = (Ataques)arg;
+            int gana = ataqueResivido.getGanador();
+            int daño=ataqueResivido.getDañoTotal();
+            int posicion=ataqueResivido.getPosicionObjetivo();
+            System.out.println("Posicion Aliado> "+posicion+" -daño:"+daño);
+
     }
 }
+
 

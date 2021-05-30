@@ -1,6 +1,5 @@
-package Main.Controller;
+package main.Controller;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -21,17 +20,15 @@ public class ThreadCliente extends Observable implements Runnable {
         try {
             bufferDeEntrada = new ObjectInputStream(socket.getInputStream());
 
-            Ataques AtaqueRecibido=null;
+            Ataques AtaqueRecibido;
             do {
                 try {
-                    Thread.sleep(ThreadLocalRandom.current().nextLong(1000L)+100);
+                    Thread.sleep(ThreadLocalRandom.current().nextLong(100L)+100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 try {
                     AtaqueRecibido = (Ataques) bufferDeEntrada.readObject();
-                    //String[] array = st.split(":");
-
                     this.setChanged();
                     this.notifyObservers(AtaqueRecibido);
                 } catch (IOException e) {
@@ -39,7 +36,7 @@ public class ThreadCliente extends Observable implements Runnable {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            }while (AtaqueRecibido.getGanador()!=2);
+            }while (true);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,9 @@
-package Main.Controller;
+package main.Controller;
 
-public class Ataques {
+import java.io.Serializable;
 
+public class Ataques implements Serializable {
+    static final long serialVersionUID=123456789l;
     public int posicionObjetivo;
     public int dañoTotal;
     public int ganador;

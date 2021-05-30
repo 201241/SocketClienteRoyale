@@ -1,4 +1,4 @@
-package Main.Modelo;
+package main.Modelo;
 
 import java.io.Serializable;
 
@@ -29,3 +29,4 @@ public class paqueteEnvioMsj implements Serializable {
         this.mensaje = mensaje;
     }
 }
+    //barcoAtaqueGris barcoCazaRojo barcoGrandeCaza

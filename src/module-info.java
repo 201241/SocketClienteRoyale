@@ -3,6 +3,7 @@ module ClientSocket {
     requires javafx.fxml;
     requires java.desktop;
 
-    opens Main;
-    opens Main.Controller;
+    opens main;
+    //opens Main.Modelo;
+    opens main.Controller;
 }

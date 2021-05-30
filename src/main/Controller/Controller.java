@@ -1,5 +1,5 @@
-package Main.Controller;
-import Main.Modelo.paqueteEnvioMsj;
+package main.Controller;
+import main.Modelo.paqueteEnvioMsj;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

@@ -8,36 +8,36 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main.Controller.JuegoClash">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller.JuegoClash">
    <children>
       <ImageView fx:id="EnemigoIzq" fitHeight="87.0" fitWidth="85.0" layoutX="26.0" layoutY="66.0" onMouseReleased="#seleccionadoEnemigo1" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco2.png" />
+            <Image url="@../images/barcoAtaqueGris.png" />
          </image>
       </ImageView>
       <ImageView fx:id="EnemigoCentro" fitHeight="82.0" fitWidth="125.0" layoutX="181.0" layoutY="47.0" onMouseReleased="#seleccionadoEnemigo2" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco1.png" />
+            <Image url="@../images/barcoGrandeCaza.png" />
          </image>
       </ImageView>
       <ImageView fx:id="EnemigoDer" fitHeight="87.0" fitWidth="85.0" layoutX="386.0" layoutY="68.0" onMouseReleased="#seleccionadoEnemigo3" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco3.png" />
+            <Image url="@../images/barcoCazaRojo.png" />
          </image>
       </ImageView>
       <ImageView fx:id="AliadoIzq" fitHeight="70.0" fitWidth="96.0" layoutX="25.0" layoutY="341.0" onMouseReleased="#seleccionadoAliado1" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco2.png" />
+            <Image url="@../images/barcoAtaqueGris.png" />
          </image>
       </ImageView>
       <ImageView fx:id="AliadoCentro" fitHeight="82.0" fitWidth="126.0" layoutX="190.0" layoutY="335.0" onMouseReleased="#seleccionadoAliado2" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco1.png" />
+            <Image url="@../images/barcoGrandeCaza.png" />
          </image>
       </ImageView>
       <ImageView fx:id="AliadoDer" fitHeight="83.0" fitWidth="111.0" layoutX="359.0" layoutY="341.0" onMouseReleased="#seleccionadoAliado3" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/barco3.png" />
+            <Image url="@../images/barcoCazaRojo.png" />
          </image>
       </ImageView>
       <Label fx:id="vidaEnemigo1" alignment="CENTER" layoutX="26.0" layoutY="42.0" prefHeight="16.0" prefWidth="85.0" style="-fx-background-color: red;" text="100" textAlignment="CENTER" textFill="WHITE">
