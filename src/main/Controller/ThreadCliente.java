@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ThreadCliente extends Observable implements Runnable {
 
     private Socket socket;
-    private ObjectInputStream bufferDeEntrada = null; //DataInputStream
+    //private ObjectInputStream bufferDeEntrada = null; //DataInputStream
 
     public ThreadCliente(Socket socket){
         this.socket = socket;
@@ -18,27 +18,29 @@ public class ThreadCliente extends Observable implements Runnable {
     @Override
     public void run() {
         try {
-            bufferDeEntrada = new ObjectInputStream(socket.getInputStream());
-
+            System.out.println("Inicar buffer");
+            //ObjectInputStream bufferDeEntrada = new ObjectInputStream(socket.getInputStream());
             Ataques AtaqueRecibido;
+            //String st ="";
             do {
+                System.out.println("Recibir Thread Cliente");
                 try {
-                    Thread.sleep(ThreadLocalRandom.current().nextLong(100L)+100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    AtaqueRecibido = (Ataques) bufferDeEntrada.readObject();
+                    ObjectInputStream bufferDeEntrada = new ObjectInputStream(socket.getInputStream());
+                    Thread.sleep(ThreadLocalRandom.current().nextLong(1000L)+100);
+                    AtaqueRecibido=(Ataques)bufferDeEntrada.readObject();
                     this.setChanged();
                     this.notifyObservers(AtaqueRecibido);
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                    System.out.println("Enviar a update");
+                } catch (Exception e) {
                     e.printStackTrace();
+                    //socket.close();
+                    System.exit(0);
                 }
-            }while (true);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            }while(!socket.isClosed());
+            //bufferDeEntrada.close();
+        } catch (Exception e) {
+            //e.printStackTrace();
         }
 
     }

@@ -7,11 +7,21 @@ public class Ataques implements Serializable {
     public int posicionObjetivo;
     public int dañoTotal;
     public int ganador;
+    public String nombre;
 
-    public Ataques(int posicionEnemigo, int dañoTotal, int ganador){
+    public Ataques( String nombre,int posicionEnemigo, int dañoTotal, int ganador){
+        this.nombre = nombre;
         this.posicionObjetivo = posicionEnemigo;
         this.dañoTotal = dañoTotal;
         this.ganador = ganador;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public int getPosicionObjetivo() {

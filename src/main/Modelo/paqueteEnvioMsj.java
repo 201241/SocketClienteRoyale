@@ -1,3 +1,4 @@
+/*
 package main.Modelo;
 
 import java.io.Serializable;
@@ -30,3 +31,4 @@ public class paqueteEnvioMsj implements Serializable {
     }
 }
     //barcoAtaqueGris barcoCazaRojo barcoGrandeCaza
+*/

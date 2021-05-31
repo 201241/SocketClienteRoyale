@@ -1,10 +1,13 @@
 package main.Controller;
 
+        import javafx.application.Platform;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
         import javafx.scene.control.Label;
+        import javafx.scene.control.TextField;
         import javafx.scene.image.ImageView;
         import javafx.scene.input.MouseEvent;
+        import javafx.scene.layout.Pane;
         import javafx.scene.paint.Color;
         import javafx.scene.shape.Rectangle;
 
@@ -16,23 +19,6 @@ package main.Controller;
 
 public class JuegoClash implements Observer {
 
-    @FXML
-    private ImageView EnemigoIzq;
-
-    @FXML
-    private ImageView EnemigoCentro;
-
-    @FXML
-    private ImageView EnemigoDer;
-
-    @FXML
-    private ImageView AliadoIzq;
-
-    @FXML
-    private ImageView AliadoCentro;
-
-    @FXML
-    private ImageView AliadoDer;
 
     @FXML
     private Label vidaEnemigo1;
@@ -70,9 +56,18 @@ public class JuegoClash implements Observer {
     @FXML
     private Rectangle barraSeleccion3;
 
+    //_________Nombre VS
+    @FXML
+    private Label nombreJugador1;
+    String nombreJ1;
+
+    @FXML
+    private Label nombreJugador2;
+
+
     private boolean aliadoSeleccionado= false;
     private boolean enemigoSeleccionado= false;
-    private int daño=0;
+    //private int daño=0;
 
     private int VidaEnemigo1;
     private int VidaEnemigo2;
@@ -94,6 +89,53 @@ public class JuegoClash implements Observer {
         VidaAliado1=100;
         VidaAliado2=100;
         VidaAliado3=100;
+    }
+
+    @FXML
+    private Pane paneVistaInicio;
+
+    @FXML
+    private TextField nombreJugador;
+
+    @FXML
+    void iniciarJuego(MouseEvent event) {
+        nombreJ1=nombreJugador.getText();
+        nombreJugador1.setText(nombreJ1);
+        paneVistaInicio.setVisible(false);
+        Ataques ataqueEnviar = new Ataques( nombreJ1,0, 0,0);
+        enviarDaño(ataqueEnviar);
+    }
+
+    @FXML
+    void SalirDelJuego(MouseEvent event) {
+        System.exit(0);
+        System.out.println("Salir");
+    }
+
+
+    @FXML
+    void reiniciarJuego(MouseEvent event) {
+        VidaEnemigo1=100;
+        VidaEnemigo2=100;
+        VidaEnemigo3=100;
+
+        VidaAliado1=100;
+        VidaAliado2=100;
+        VidaAliado3=100;
+
+        vidaAliado1.setText("100");
+        vidaAliado2.setText("100");
+        vidaAliado3.setText("100");
+
+        vidaEnemigo1.setText("100");
+        vidaEnemigo2.setText("100");
+        vidaEnemigo3.setText("100");
+
+        paneGanaste.setVisible(false);
+        panePerdiste.setVisible(false);
+        paneVistaInicio.setVisible(true);
+
+        System.out.println("reiniciar");
     }
 
     public void initialize(){
@@ -190,6 +232,9 @@ public class JuegoClash implements Observer {
         }
     }
 
+    @FXML
+    private Pane paneGanaste;
+
     private int dañoTotal;
     public void enviarDatoAtaque(int ataque1, int ataque2, int ataque3, int posicionEnemigo){
         System.out.println("atacado 1");
@@ -203,7 +248,12 @@ public class JuegoClash implements Observer {
         barraSeleccion3.setFill(Color.rgb(225,225,225));
         dañoEnemigoLocal(posicionEnemigo,dañoTotal);
 
-        Ataques ataqueEnviar = new Ataques(posicionEnemigo, dañoTotal,0);
+        if(VidaEnemigo1<=0 && VidaEnemigo2<=0 && VidaEnemigo3<=0){
+            Ataques ataqueEnviar = new Ataques(nombreJ1,0, 0,1);
+            enviarDaño(ataqueEnviar);
+            paneGanaste.setVisible(true);
+        }
+        Ataques ataqueEnviar = new Ataques(nombreJ1,posicionEnemigo, dañoTotal,0);
         enviarDaño(ataqueEnviar);
 
     }
@@ -252,15 +302,58 @@ public class JuegoClash implements Observer {
 
     }
 
+    Ataques ataqueResivido;
+    int daño=0;
+    int posicion=0;
+
+    @FXML
+    private Pane panePerdiste;
+
+
     @Override
     public void update(Observable o, Object arg) {
         //if(o instanceof )
-
-            Ataques ataqueResivido = (Ataques)arg;
+        System.out.println("Update cliente");
+            ataqueResivido = (Ataques)arg;
             int gana = ataqueResivido.getGanador();
-            int daño=ataqueResivido.getDañoTotal();
-            int posicion=ataqueResivido.getPosicionObjetivo();
+            daño=ataqueResivido.getDañoTotal();
+            posicion=ataqueResivido.getPosicionObjetivo();
             System.out.println("Posicion Aliado> "+posicion+" -daño:"+daño);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                nombreJugador2.setText(ataqueResivido.getNombre());
+                if(gana==1){
+                    System.out.println("Gana jugador server");
+                    panePerdiste.setVisible(true);
+                }else{
+                    if(posicion==1){
+                        VidaAliado1-=daño;
+                        vidaAliado1.setText(String.valueOf(VidaAliado1));
+                        if(VidaAliado1<=0){
+                            vidaAliado1.setText("Eliminado");
+                        }
+                    }if(posicion==2){
+                        VidaAliado2-=daño;
+                        vidaAliado2.setText(String.valueOf(VidaAliado2));
+                        if(VidaAliado2<=0){
+                            vidaAliado2.setText("Eliminado");
+                        }
+                    }
+                    if(posicion==3){
+                        VidaAliado3-=daño;
+                        vidaAliado3.setText(String.valueOf(VidaAliado3));
+                        if(VidaAliado3<=0){
+                            vidaAliado3.setText("Eliminado");
+                        }
+                    }
+                }
+
+
+            }
+        });
+
 
     }
 }

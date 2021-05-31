@@ -1,3 +1,4 @@
+/*
 package main.Controller;
 import main.Modelo.paqueteEnvioMsj;
 import javafx.event.ActionEvent;
@@ -48,9 +49,11 @@ public class Controller implements Runnable{
             paqueteMsj.writeObject(datos);
             miSocket.close();
 
-            /*DataOutputStream flujoSalida = new DataOutputStream(miSocket.getOutputStream()); //flujo de datos se enviar en la conexion indicada
+            */
+/*DataOutputStream flujoSalida = new DataOutputStream(miSocket.getOutputStream()); //flujo de datos se enviar en la conexion indicada
             flujoSalida.writeUTF(texto.getText()); // escribe en el flujo
-            flujoSalida.close();*/
+            flujoSalida.close();*//*
+
 
         } catch (IOException ioException) {
             System.out.println(ioException.getMessage());
@@ -78,3 +81,4 @@ public class Controller implements Runnable{
     }
 }
 
+*/
